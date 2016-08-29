@@ -202,7 +202,7 @@ Editor.App.extend({
 
     // create main window
     let mainWin = new Editor.Window('main', {
-      title: 'VisualUIEditor',
+      title: 'VisualUIEditor ' + Electron.app.getVersion(),
       width: 900,
       height: 700,
       minWidth: 900,
@@ -225,7 +225,6 @@ Editor.App.extend({
     if ( Editor.argv.showDevtools ) {
       // NOTE: open dev-tools before did-finish-load will make it insert an unused <style> in page-level
       mainWin.nativeWin.webContents.once('did-finish-load', function () {
-        // mainWin.openDevTools();
       });
     }
     mainWin.focus();
