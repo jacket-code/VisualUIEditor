@@ -44,7 +44,11 @@ Editor.App.extend({
               {
                 label: Editor.T('关于'),
                 click () {
-                  Editor.log("about!!!!!!!!!!!!!");
+                  let win = new Electron.BrowserWindow({ width: 700, height: 500 })
+                  win.on('closed', function () { win = null })
+                  win.loadURL("app://html/about.html")//指定渲染的页面
+                  win.show()//打开一个窗口
+                  
                 }
               },
               { type: 'separator' },

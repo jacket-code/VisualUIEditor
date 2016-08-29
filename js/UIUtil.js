@@ -89,3 +89,10 @@ function checkTextureExist(url) {
     return true;
 }
 
+function openHtmlInNewWindow(url, width, height) {
+//   const modalPath = path.join(url)
+  let win = new Electron.remote.BrowserWindow({ width: width || 400, height: height || 320 })
+  win.on('closed', function () { win = null })
+  win.loadURL(url)//指定渲染的页面
+  win.show()//打开一个窗口
+}
