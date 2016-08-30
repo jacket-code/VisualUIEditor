@@ -38,7 +38,7 @@ open shell in project root and run
 
 Runtime
 -------------
-支持cocos2dx的应用(当前仅lua)
+支持cocos2dx的应用(当前支持Lua及CPP)
 [cocos2dx runtime](https://github.com/tickbh/VisualUIEditor_2dx_runtime "cocos2dx runtime")
 
 其它信息
