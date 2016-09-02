@@ -26,7 +26,7 @@ function isBaseTypeByName(name) {
         name = name.substring(0, index);
     }
     if(name == "LabelTTF" || name == "Slider" || name == "Sprite"
-       || name == "Scale9" || name == "Input" || name == "Button" || name == "CheckBox") {
+       || name == "Scale9" || name == "Input" || name == "Button" || name == "CheckBox" || name == "LabelAtlas") {
         return true;
     }
     if(startWith(name, "SubPath:")) {
@@ -259,14 +259,20 @@ function cocosExportNodeData(node, ext) {
                 color = node.getBackGroundEndColor();
                 data["bkEndColor"] = [color.r, color.g, color.b, color.a];
             }
-        }
-
+       }
        data["layoutType"] = node.layoutType;
        if(node.clippingEnabled) {
            data["clippingEnabled"] = node.clippingEnabled;
            data["clippingType"] = node.clippingType;
        }
-
+    } else if(node._className == "LabelAtlas") {
+        if(node._charMapFile) {
+            node._string && (data["string"] = node._string);
+            data["charMapFile"] = node._charMapFile;
+            data["itemWidth"] = node._itemWidth || 0;
+            data["itemHeight"] = node._itemHeight || 0;
+            data["mapStartChar"] = node._mapStartChar || "0";
+        }
     }
 
     if(!isBaseType(node)) {
@@ -390,6 +396,9 @@ function cocosGenNodeByData(data, parent, isSetParent) {
     } else if(data.type == "Layout") {
         node = new ccui.Layout();
         node._className = "Layout";
+    } else if(data.type == "LabelAtlas") {
+        node = new cc.LabelAtlas();
+        node._className = "LabelAtlas";
     } else {
         node = new cc.Node();
         node._className = "Node";
@@ -498,8 +507,6 @@ function cocosGenNodeByData(data, parent, isSetParent) {
                 data.insetBottom && (node.insetBottom = data.insetBottom);
             });
         }
-
-
     } else if(data.type == "Slider") {
         (data["percent"]) && (node.percent = data["percent"]);
         setNodeSpriteFrame("barBg", data["barBg"], node, node.loadBarTexture);
@@ -539,7 +546,13 @@ function cocosGenNodeByData(data, parent, isSetParent) {
         (data["layoutType"]) && (node.setLayoutType(data["layoutType"]));
         (data["clippingEnabled"]) && (node.setClippingEnabled(data["clippingEnabled"]));
         (data["clippingType"]) && (node.setClippingType(data["clippingType"]));
-
+    } else if(node._className == "LabelAtlas") {
+        if(data.charMapFile && getFullPathForName(data.charMapFile)) {
+            let fullpath = getFullPathForName(data.charMapFile);
+            cc.textureCache.addImage(fullpath, function(){
+                node.initWithString(data["string"] || "", data.charMapFile, data["itemWidth"] || 0, data["itemHeight"] || 0, data["mapStartChar"] || "0");
+            });
+        }
     }
 
     data.children = data.children || [];
@@ -644,7 +657,13 @@ function createEmptyNodeByType(data) {
         node.setBackGroundColorType(1);
         node.setContentSize(cc.size(100, 100));
         node._className = "Layout";
+    } else if(data == "LabelAtlas") {
+        let _charMapFile = "res/default/AltasNum.png";
+        node = new cc.LabelAtlas("453224679", _charMapFile, 20, 27, "0");
+        node._charMapFile = _charMapFile
+        node._className = "LabelAtlas";
     }
+    
     node._name = "";
     return node;
 }
