@@ -577,6 +577,7 @@
         let newValue = cocosExportNodeData(node, {uuid: true});
         this._undo.add(newPropCommandChange(runScene, parent.uuid, node.uuid, {}, newValue, AddPropChange));
         parent.addChild(node);
+        this.changeItemSelect({uuid: node.uuid});
     },
 
     _doItemMove: function(event) {
@@ -925,10 +926,10 @@
         }
 
         if (node) {
-            this._doItemAdd(runScene, node);
             node.setPosition(parseFloat(scenePosition.x), parseFloat(scenePosition.y));
             node.uuid = uuid;
             node.uiname = data;
+            this._doItemAdd(runScene, node);
             Editor.Ipc.sendToAll("ui:scene_item_add", {uuid:uuid});
         }
         
