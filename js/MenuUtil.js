@@ -75,4 +75,35 @@ MenuUtil.createNodeMenu = function() {
 }
 
 
+MenuUtil.createPosition = function() {
+    return [
+        {
+            label: Editor.T('移至顶层'),
+            click () {
+                Editor.Ipc.sendToAll('ui:move_position_top');
+            }
+        },
+        {
+            label: Editor.T('移至上一层'),
+            click () {
+                Editor.Ipc.sendToAll('ui:move_position_up');
+            }
+        },
+        {
+            label: Editor.T('移至下一层'),
+            click () {
+                Editor.Ipc.sendToAll('ui:move_position_down');
+            }
+        },
+        {
+            label: Editor.T('移至底层'),
+            click () {
+                Editor.Ipc.sendToAll('ui:move_position_bottom');
+            }
+        }
+    ]
+}
+
+
+
 module.exports = MenuUtil;

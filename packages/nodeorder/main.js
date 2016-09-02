@@ -44,6 +44,12 @@ module.exports = {
             Editor.Ipc.sendToAll('node:delete_item');
           }
         },
+        { type: 'separator' },
+        {
+          label: Editor.T('位置移动'),
+          params: [],
+          submenu: MenuUtil.createPosition(),
+        },
       ];
     }, true );
   },

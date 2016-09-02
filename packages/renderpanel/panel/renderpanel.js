@@ -622,6 +622,9 @@
         } else {
             saveSceneToFile(this._openPath, this.$.scene.getRunScene());
         }
+
+        let runScene = this.$.scene.getRunScene();
+        runScene._undo.save();
     },
 
     ready: function () {

@@ -312,6 +312,55 @@
             item.name = name;
         }
       },
+      'ui:move_position_top'(event, message) {
+          if(!this._curMouseOverItem) {
+              return;
+          }
+          let parentItem = Polymer.dom(this._curMouseOverItem).parentNode;
+          if(!parentItem) {
+              return;
+          }
+          let firstChild = Polymer.dom(parentItem).firstElementChild;
+          this._curOpMode = "top";
+          this.tryChangeItemPosition(this._curMouseOverItem, firstChild);
+      },
+      'ui:move_position_up'(event, message) {
+          if(!this._curMouseOverItem) {
+              return;
+          }
+          let parentItem = Polymer.dom(this._curMouseOverItem).previousElementSibling;
+          if(!parentItem) {
+              return;
+          }
+          this._curOpMode = "top";
+          this.tryChangeItemPosition(this._curMouseOverItem, parentItem);
+
+
+      },
+      'ui:move_position_down'(event, message) {    
+          if(!this._curMouseOverItem) {
+              return;
+          }      
+          let parentItem = Polymer.dom(this._curMouseOverItem).nextElementSibling;
+          if(!parentItem) {
+              return;
+          }
+          this._curOpMode = "bottom";
+          this.tryChangeItemPosition(this._curMouseOverItem, parentItem);
+          
+      },
+      'ui:move_position_bottom'(event, message) {
+          if(!this._curMouseOverItem) {
+              return;
+          }
+          let parentItem = Polymer.dom(this._curMouseOverItem).parentNode;
+          if(!parentItem) {
+              return;
+          }
+          let firstChild = Polymer.dom(parentItem).lastElementChild;
+          this._curOpMode = "bottom";
+          this.tryChangeItemPosition(this._curMouseOverItem, firstChild);
+      },
     },
 
   });
