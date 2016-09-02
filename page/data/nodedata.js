@@ -43,6 +43,10 @@ function TouchData(node) {
     this._node = node;
 }
 
+function LabelAtlasData(node) {
+    this._node = node;
+}
+
 function FixNodeHor(node, step) {
     node.x += step;
     if(node.left) {
@@ -305,6 +309,8 @@ NodeData.prototype = {
             node.push(new CheckBoxData(this._node));
         } else if(this._node._className == "Layout") {
             node.push(new LayoutData(this._node));
+        } else if(this._node._className == "LabelAtlas") {
+            node.push(new LabelAtlasData(this._node));
         } else {
         }
         
@@ -569,6 +575,36 @@ NodeData.prototype = {
             } else if(path == "clippingType") {
                 this._node.setClippingType(parseInt(value));
             }
+        } else if(this._node._className == "LabelAtlas") {
+            let node = this._node;
+            let parent = node.getParent();
+            let data = cocosExportNodeData(this._node, {uuid:true});
+            if(path == "string") {
+                data.string = value
+            } else if(path == "charMapFile") {
+                data.charMapFile = value;
+            } else if(path == "itemWidth") {
+                data.itemWidth = value;
+            } else if(path == "itemHeight") {
+                data.itemHeight = value;
+            } else if(path == "mapStartChar") {
+                data.mapStartChar = value;
+            }
+
+            let self = this;
+            let fullpath = getFullPathForName(data.charMapFile);
+            cc.textureCache.addImage(fullpath, function(atlas){
+                let size = atlas.getContentSize();
+                if(data.itemWidth > size.width || data.itemHeight > size.height) {
+                    data.itemWidth = size.width / 10;
+                    data.itemHeight = size.height;
+                }
+                let newNode = cocosGenNodeByData(data, parent);
+                node.removeFromParent();
+                parent.addChild(newNode);
+                self._node = newNode;
+            });
+            
         } else {
             return;
         }
@@ -1542,6 +1578,83 @@ TouchData.prototype = {
         return [
             this.touchEnabled,
             this.touchListener,
+        ];
+    }
+    
+};
+
+LabelAtlasData.prototype = {
+    __editor__ : {
+        "inspector1": "cc.LabelAtlasData",
+    },
+    __displayName__: "LabelAtlasData",
+    __type__: "cc.LabelAtlasData",
+
+    get string() {
+        return {
+            path: "string",
+            type: "string",
+            name: "string",
+            attrs: {
+            },
+            value: this._node._string,
+        };
+    },
+
+    get charMapFile() {
+        return {
+            path: "charMapFile",
+            type: "fire-asset",
+            name: "charMapFile",
+            attrs: {
+            },
+            value: this._node._charMapFile,
+        };
+    },
+
+    get itemWidth() {
+        return {
+            path: "itemWidth",
+            type: "number",
+            name: "itemWidth",
+            attrs: {
+            },
+            value: this._node._itemWidth,
+        };
+    },
+
+
+    get itemHeight() {
+        return {
+            path: "itemHeight",
+            type: "number",
+            name: "itemHeight",
+            attrs: {
+            },
+            value: this._node._itemHeight,
+        };
+    },
+
+
+    get mapStartChar() {
+        return {
+            path: "mapStartChar",
+            type: "string",
+            name: "mapStartChar",
+            attrs: {
+            },
+            value: this._node._mapStartChar,
+        };
+    },
+
+
+    get __props__() {
+        return [
+            this.string,
+            this.charMapFile,
+            this.itemWidth,
+            this.itemHeight,
+            this.mapStartChar,
         ];
     }
     

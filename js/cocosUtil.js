@@ -550,7 +550,8 @@ function cocosGenNodeByData(data, parent, isSetParent) {
         if(data.charMapFile && getFullPathForName(data.charMapFile)) {
             let fullpath = getFullPathForName(data.charMapFile);
             cc.textureCache.addImage(fullpath, function(){
-                node.initWithString(data["string"] || "", data.charMapFile, data["itemWidth"] || 0, data["itemHeight"] || 0, data["mapStartChar"] || "0");
+                node.initWithString(data["string"] || "", fullpath, data["itemWidth"] || 0, data["itemHeight"] || 0, data["mapStartChar"] || "0");
+                node._charMapFile = data.charMapFile;
             });
         }
     }
