@@ -248,37 +248,6 @@
           return false;
         },
 
-        // DISABLE
-        // _props ( target ) {
-        //   var props = [];
-        //   for ( var p in target ) {
-        //     if ( p === '__type__' )
-        //       continue;
-
-        //     var prop = target[p];
-        //     if ( !prop.attrs || prop.attrs.visible === false )
-        //       continue;
-
-        //     props.push ( prop );
-        //   }
-        //   return props;
-        // },
-
-        // DISABLE
-        // _onValueChanged ( event ) {
-        //   var mixinType = this.target.__type__;
-        //   var propEL = Polymer.dom(event).localTarget
-        //   var subPath = event.detail.path;
-
-        //   if ( subPath ) {
-        //     this.notifyPath('target.' + propEL.name + '.' + subPath,
-        //             event.detail.value );
-        //   } else {
-        //     this.notifyPath('target.' + propEL.name + '.value',
-        //             event.detail.value );
-        //   }
-        // },
-
         _onKeyDown (event) {
           // press 'enter' and 'space'
           if (event.keyCode === 13 || event.keyCode === 32) {

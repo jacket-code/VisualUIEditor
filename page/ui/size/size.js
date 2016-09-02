@@ -11,17 +11,17 @@ Editor.polymerElement({
                     isHeightPer:false
                 }
             },
-            notify: !0
+            notify: true
         },
         disabled: {
             type: Boolean,
-            value: !1,
-            reflectToAttribute: !0
+            value: false,
+            reflectToAttribute: true
         },
         readonly: {
             type: Boolean,
-            value: !1,
-            reflectToAttribute: !0
+            value: false,
+            reflectToAttribute: true
         }
     }
 });

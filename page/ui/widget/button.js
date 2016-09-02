@@ -9,9 +9,9 @@ Editor.polymerElement({
     properties: {
         nofocus: {
             type: Boolean,
-            value: !1,
-            notify: !0,
-            reflectToAttribute: !0
+            value: false,
+            notify: true,
+            reflectToAttribute: true
         }
     },
     ready: function() {

@@ -56,7 +56,6 @@
         }, function() {
         }.bind(this));
 
-        // cc._gameDiv.style.position = 'absolute';
     },
 
     attached: function() {
