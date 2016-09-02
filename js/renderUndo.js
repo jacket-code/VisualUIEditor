@@ -246,8 +246,13 @@ class UndoList extends EventEmitter {
   }
 
   save () {
+    this.commit();
     this._savePosition = this._position;
     this._changed('save');
+  }
+
+  isSaved() {
+    return this._savePosition == this._position && !this._curGroup.canCommit();
   }
 
   clear () {
@@ -344,6 +349,10 @@ class UndoObj {
 
   save () {
     this._undoList.save();
+  }
+
+  isSaved() {
+    return this._undoList.isSaved();
   }
 
   clear () {

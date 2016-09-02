@@ -616,6 +616,14 @@
         }
     },
 
+    _doSaveFunc: function() {
+        if(this.modeSelected == 1) {
+            saveFileByContent(this._openPath, this._editor.getValue())
+        } else {
+            saveSceneToFile(this._openPath, this.$.scene.getRunScene());
+        }
+    },
+
     ready: function () {
         this._undo = null;
         this._firstSelectItem = null;
@@ -680,11 +688,7 @@
            }
             
            if(event.keyCode == Editor.KeyCode('s') && event.ctrlKey && this._openPath) {
-               if(this.modeSelected == 1) {
-                   saveFileByContent(this._openPath, this._editor.getValue())
-               } else {
-                   saveSceneToFile(this._openPath, this.$.scene.getRunScene());
-               }
+               this._doSaveFunc();
                event.stopPropagation();
                event.preventDefault();
            } else if(event.keyCode == Editor.KeyCode('delete')) {
@@ -1044,13 +1048,41 @@
         "ui:open_file"(event, message) {
             let path = message.path;
             if(endWith(path, ".ui")) {
-               let scene = loadSceneFromFile(path);
-               
-               if(scene && (scene._className == "Scene")) {
-                   this._openPath = path;
-                   window.localStorage["last_open_ui"] = path;
-                   this.sceneChange(scene);
-               }
+                let dialog = Electron.remote.dialog;
+                let runScene = this.$.scene.getRunScene();
+                let self = this;
+                var openScene = function() {
+                    let scene = loadSceneFromFile(path);
+                    if(scene && (scene._className == "Scene")) {
+                        self._openPath = path;
+                        window.localStorage["last_open_ui"] = path;
+                        self.sceneChange(scene);
+                    }
+                };
+                let isModify = false;
+                if(runScene._undo && !runScene._undo.isSaved()) {
+                    isModify = true;
+                    dialog.showMessageBox({
+                        type:"question",
+                        buttons:["取消", "确定", "不保存"],
+                        title:"是否保存",
+                        message:"您已进行修改，尚未保存，是否保存？",
+                    }, function (buttonIndex) {
+                        if(buttonIndex == 0) {
+                            return;
+                        }
+                        if(buttonIndex == 1) {
+                            self._doSaveFunc();
+                        }
+                        openScene();
+                    })
+                }
+
+                if(!isModify) {
+                    openScene();
+                }
+
+                
             }
         },
         'ui:scene_prop_change'(event, message) {
