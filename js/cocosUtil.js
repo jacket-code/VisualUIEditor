@@ -456,43 +456,50 @@ function cocosGenNodeByData(data, parent, isSetParent) {
 
         if(data.spriteBg && getFullPathForName(data.spriteBg)) {
             let fullpath = getFullPathForName(data.spriteBg);
-            let anchor = node.getAnchorPoint();
-            let size = node.getPreferredSize();
-            node.initWithBackgroundSprite(new cc.Scale9Sprite(fullpath));
-            node.setAnchorPoint(anchor);
-            node.setPreferredSize(size);
-            node._spriteBg = data.spriteBg;
+            cc.textureCache.addImage(fullpath, function(){
+                let anchor = node.getAnchorPoint();
+                let size = node.getPreferredSize();
+                node.initWithBackgroundSprite(new cc.Scale9Sprite(fullpath));
+                node.setAnchorPoint(anchor);
+                node.setPreferredSize(size);
+                node._spriteBg = data.spriteBg;
+            })
         }
 
     } else if(data.type == "Sprite") {
         if(data.spriteFrame && getFullPathForName(data.spriteFrame)) {
             let fullpath = getFullPathForName(data.spriteFrame);
-            let anchor = node.getAnchorPoint();
-            node.initWithFile(fullpath);
-            node.setAnchorPoint(anchor);
-            node._spriteFrame = data.spriteFrame;
+            cc.textureCache.addImage(fullpath, function(){
+                let anchor = node.getAnchorPoint();
+                node.initWithFile(fullpath);
+                node.setAnchorPoint(anchor);
+                node._spriteFrame = data.spriteFrame;
+                data.blendSrc && (node.setBlendFunc(parseInt(data.blendSrc), node.getBlendFunc().dst));
+                data.blendDst && (node.getBlendFunc().src, node.setBlendFunc(parseInt(data.blendDst)));
+            })
         }
-        data.blendSrc && (node.setBlendFunc(parseInt(data.blendSrc), node.getBlendFunc().dst));
-        data.blendDst && (node.getBlendFunc().src, node.setBlendFunc(parseInt(data.blendDst)));
     } else if(data.type == "Scale9") {
-        let size = node.getContentSize();
-
         if(data.spriteFrame && getFullPathForName(data.spriteFrame)) {
             let fullpath = getFullPathForName(data.spriteFrame);
-            let anchor = node.getAnchorPoint();
-            node.initWithFile(fullpath);
-            node.setAnchorPoint(anchor);
-            node._spriteFrame = data.spriteFrame;
+            cc.textureCache.addImage(fullpath, function(){
+                let size = node.getContentSize();
+                let anchor = node.getAnchorPoint();
+                node.initWithFile(fullpath);
+                node.setAnchorPoint(anchor);
+                node._spriteFrame = data.spriteFrame;
+
+                if(!cc.sizeEqualToSize(size, cc.size(0, 0))) {
+                    node.setPreferredSize(size);
+                }
+
+                data.insetLeft && (node.insetLeft = data.insetLeft);
+                data.insetTop && (node.insetTop = data.insetTop);
+                data.insetRight && (node.insetRight = data.insetRight);
+                data.insetBottom && (node.insetBottom = data.insetBottom);
+            });
         }
 
-        if(!cc.sizeEqualToSize(size, cc.size(0, 0))) {
-            node.setPreferredSize(size);
-        }
 
-        data.insetLeft && (node.insetLeft = data.insetLeft);
-        data.insetTop && (node.insetTop = data.insetTop);
-        data.insetRight && (node.insetRight = data.insetRight);
-        data.insetBottom && (node.insetBottom = data.insetBottom);
     } else if(data.type == "Slider") {
         (data["percent"]) && (node.percent = data["percent"]);
         setNodeSpriteFrame("barBg", data["barBg"], node, node.loadBarTexture);
