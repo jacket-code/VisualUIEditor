@@ -702,6 +702,16 @@ WidgetData.prototype = {
     },
 
     get relativePosition() {
+
+        let parent = this._node.getParent();
+        let left = this._node.x;
+        let right = 0;
+        let top = 0;
+        let bottom = this._node.y
+        if(parent) {
+            right = parent.width - this._node.x;
+            top = parent.height - this._node.y;
+        }
         return {
             path: "relativePosition",
             type: "vec2",
@@ -715,10 +725,10 @@ WidgetData.prototype = {
                 isAlignTop: "number" == typeof this._node.top,
                 isAlignRight: "number" == typeof this._node.right,
                 isAlignBottom: "number" == typeof this._node.bottom,
-                left:this._node.left || 0,
-                top:this._node.top || 0,
-                right:this._node.right || 0,
-                bottom:this._node.bottom || 0,
+                left:this._node.left || left,
+                top:this._node.top || top,
+                right:this._node.right || right,
+                bottom:this._node.bottom || bottom,
             }
         }
     },
