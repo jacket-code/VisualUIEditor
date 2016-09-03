@@ -290,6 +290,11 @@ function getCanUseFile(path) {
     };
 }
 
+function isNum(value) {
+    return typeof value == "number";
+}
+
+
 function isNull(value) {
     return value === null || value === undefined;
 }

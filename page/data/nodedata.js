@@ -49,21 +49,27 @@ function LabelAtlasData(node) {
 
 function FixNodeHor(node, step) {
     node.x += step;
-    if(node.left) {
+    if(isNum(node.left)) {
         node.left += step; 
     }
-    if(node.right) {
+    if(isNum(node.right)) {
         node.right -= step;
-    } 
+    }
+    if(isNum(node.horizontal)) {
+        node.horizontal += step; 
+    }
 }
 
 function FixNodeVer(node, step) {
     node.y += step;
-    if(node.top) {
+    if(isNum(node.top)) {
         node.top -= step; 
     }
-    if(node.bottom) {
-        node.right += step;
+    if(isNum(node.bottom)) {
+        node.bottom += step;
+    }
+    if(isNum(node.vertical)) {
+        node.vertical += step; 
     }
 }
 
@@ -411,6 +417,14 @@ NodeData.prototype = {
             if(!value) {
                 this._node.bottom = null;
             }
+        } else if(path == "relativePosition.checkHorizontal") {
+            if(!value) {
+                this._node.horizontal = null;
+            }
+        } else if(path == "relativePosition.checkVertical") {
+            if(!value) {
+                this._node.vertical = null;
+            }
         }
          else if(path == "relativePosition.top") {
             value = parseFloat(value);
@@ -419,17 +433,20 @@ NodeData.prototype = {
                 addNodeCommand(this._node, "y", this._node.y, parent.height - value);
                 this._node.y = parent.height - value;
                 this._node.top = value;
+                this._node.bottom = null;
             }
         } else if(path == "relativePosition.bottom") {
             value = parseFloat(value);
             addNodeCommand(this._node, "y", this._node.y, value);
             this._node.y = value;
             this._node.bottom = value;
+            this._node.top = null;
         } else if(path == "relativePosition.left") {
             value = parseFloat(value);
             addNodeCommand(this._node, "x", this._node.x, value);
             this._node.x = value;
             this._node.left = value;
+            this._node.right = null;
         } else if(path == "relativePosition.right") {
             value = parseFloat(value);
             let parent = this._node.getParent();
@@ -437,6 +454,27 @@ NodeData.prototype = {
                 addNodeCommand(this._node, "x", this._node.x, parent.width - value);
                 this._node.x = parent.width - value;
                 this._node.right = value;
+                this._node.left = null;
+            }
+        } else if(path == "relativePosition.horizontal") {
+            this._node.left = null;
+            this._node.right = null;
+
+            value = parseFloat(value);
+            let parent = this._node.getParent();
+            if(parent && parent.width) {
+                this._node.x = parent.width / 2 + value;
+                this._node.horizontal = value;
+            }
+        } else if(path == "relativePosition.vertical") {
+            this._node.bottom = null;
+            this._node.top = null;
+
+            value = parseFloat(value);
+            let parent = this._node.getParent();
+            if(parent && parent.width) {
+                this._node.y = parent.height / 2 + value;
+                this._node.vertical = value;
             }
         } else if(path == "visible") {
             addNodeCommand(this._node, "visible", this._node.visible, value);
@@ -698,7 +736,8 @@ WidgetData.prototype = {
 
 
     get folded() {
-        return !(this._node.left || this._node.top || this._node.right || this._node.bottom);
+        return isNull(this._node.left) && isNull(this._node.top) && isNull(this._node.right)
+             && isNull(this._node.bottom) && isNull(this._node.horizontal) && isNull(this._node.vertical);
     },
 
     get relativePosition() {
@@ -707,7 +746,8 @@ WidgetData.prototype = {
         let left = this._node.x;
         let right = 0;
         let top = 0;
-        let bottom = this._node.y
+        let bottom = this._node.y;
+
         if(parent) {
             right = parent.width - this._node.x;
             top = parent.height - this._node.y;
@@ -725,10 +765,14 @@ WidgetData.prototype = {
                 isAlignTop: "number" == typeof this._node.top,
                 isAlignRight: "number" == typeof this._node.right,
                 isAlignBottom: "number" == typeof this._node.bottom,
+                isAlignHorizontalCenter: "number" == typeof this._node.horizontal,
+                isAlignVerticalCenter: "number" == typeof this._node.vertical,
                 left:this._node.left || left,
                 top:this._node.top || top,
                 right:this._node.right || right,
                 bottom:this._node.bottom || bottom,
+                horizontal:this._node.horizontal || 0,
+                vertical:this._node.vertical || 0,
             }
         }
     },

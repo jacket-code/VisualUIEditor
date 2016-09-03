@@ -62,9 +62,16 @@
                 </div>
             </div>
             <div id="lower" class="layout horizontal center">
-                <editor-checkbox value="{{value.isAlignHorizontalCenter}}" on-value-changed="_onHorizontalCenterChecked">Horizontal Center</editor-checkbox>
+                <div class="layout vertical">
+                    <editor-checkbox value="{{value.isAlignHorizontalCenter}}" path="{{path}}.checkHorizontal" on-value-changed="_onHorizontalCenterChecked">Horizontal Center</editor-checkbox>
+                    <editor-input id="horizontal_input" class="bottom-input" value="{{value.horizontal}}" path="{{path}}.horizontal" hidden="{{!_is(value.isAlignHorizontalCenter)}}"></editor-input>
+                </div>
+                
                 <span class="flex-1"></span>
-                <editor-checkbox value="{{value.isAlignVerticalCenter}}" on-value-changed="_onVerticalCenterChecked">Vertical Center</editor-checkbox>
+                <div class="layout vertical">
+                    <editor-checkbox value="{{value.isAlignVerticalCenter}}" path="{{path}}.checkVertical" on-value-changed="_onVerticalCenterChecked">Vertical Center</editor-checkbox>
+                    <editor-input id="vertical_input" class="bottom-input" value="{{value.vertical}}" path="{{path}}.vertical" hidden="{{!_is(value.isAlignVerticalCenter)}}"></editor-input>
+                </div>
             </div>
         </div>
     </template>

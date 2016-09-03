@@ -38,12 +38,14 @@ Editor.polymerElement({
         if(e.value) {
             this.set("value.isAlignLeft", false);
             this.set("value.isAlignRight", false);
+            this.$.horizontal_input.confirm();
         }
     },
     _onVerticalCenterChecked: function(t, e) {
         if(e.value) {
             this.set("value.isAlignTop", false);
             this.set("value.isAlignBottom", false);
+            this.$.vertical_input.confirm();
         }
     }
 });

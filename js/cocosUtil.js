@@ -73,16 +73,18 @@ function cocosExportNodeData(node, ext) {
         data["height"] = node.height.toFixed(0);
     }
 
-    if(node.left || node.right) {
-        node.left && (data["left"] = fixFloatValue(node.left));
-        node.right && (data["right"] = fixFloatValue(node.right));
+    if(isNum(node.left) || isNum(node.right) || isNum(node.horizontal)) {
+        isNum(node.left) && (data["left"] = fixFloatValue(node.left));
+        isNum(node.right) && (data["right"] = fixFloatValue(node.right));
+        isNum(node.horizontal) && (data["horizontal"] = fixFloatValue(node.horizontal));
     } else {
         data["x"] = fixFloatValue(node.x);
     }
 
-    if(node.top || node.bottom) {
-        node.top && (data["top"] = fixFloatValue(node.top));
-        node.bottom && (data["bottom"] = fixFloatValue(node.bottom));
+    if(isNum(node.top) || isNum(node.bottom) || isNum(node.vertical)) {
+        isNum(node.top) && (data["top"] = fixFloatValue(node.top));
+        isNum(node.bottom) && (data["bottom"] = fixFloatValue(node.bottom));
+        isNum(node.vertical) && (data["vertical"] = fixFloatValue(node.vertical));
     } else {
         data["y"] = fixFloatValue(node.y);
     }
@@ -421,9 +423,11 @@ function cocosGenNodeByData(data, parent, isSetParent) {
 
     (!isNull(data.left)) && (node.x = parseFloat(data.left), node.left = data.left);
     (!isNull(data.right) && parent) && (node.x = parent.width - parseFloat(data.right), node.right = data.right );
+    (!isNull(data.horizontal) && parent) && (node.x = parent.width / 2 + data.horizontal, node.horizontal = data.horizontal );
 
     (!isNull(data.bottom)) && (node.y = parseFloat(data.bottom), node.bottom = data.bottom );
     (!isNull(data.top) && parent) && (node.y = parent.height - parseFloat(data.top), node.top = data.top );
+    (!isNull(data.vertical) && parent) && (node.y = parent.height / 2 + data.vertical, node.vertical = data.vertical );
 
     (!isNull(data.anchorX)) && (node.anchorX = parseFloat(data.anchorX));
     (!isNull(data.anchorY)) && (node.anchorY = parseFloat(data.anchorY));
