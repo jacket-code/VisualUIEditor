@@ -293,6 +293,10 @@ NodeData.prototype = {
     },
 
     get __comps__() {
+        let extControl = GetExtNodeControl(this._node._className);
+        if(extControl) {
+            return extControl.PropComps(this._node);
+        }
         let node = [ new WidgetData(this._node) ];
         if(this._node._className == "Node") {
         } else if(this._node._className == "Sprite") {
@@ -333,6 +337,7 @@ NodeData.prototype = {
     },
 
     setAttrib(path, value) {
+        let extControl = GetExtNodeControl(this._node._className)
         if(path == "tag") {
             addNodeCommand(this._node, "_name", this._node._name, value);
             this._node._name = value;
@@ -425,8 +430,7 @@ NodeData.prototype = {
             if(!value) {
                 this._node.vertical = null;
             }
-        }
-         else if(path == "relativePosition.top") {
+        } else if(path == "relativePosition.top") {
             value = parseFloat(value);
             let parent = this._node.getParent();
             if(parent && parent.height) {
@@ -485,6 +489,8 @@ NodeData.prototype = {
         } else if(path == "touchListener") {
             addNodeCommand(this._node, "touchListener", this._node.touchListener, value);
             this._node.touchListener = value;
+        } else if(extControl) {
+            extControl.SetPropChange(this._node, path, value);
         } else if(this._node._className == "LabelTTF") {
             if(path == "string") {
                 this._node.string = value;

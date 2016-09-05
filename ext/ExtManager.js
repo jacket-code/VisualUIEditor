@@ -8,10 +8,10 @@ function RegisterExtNodeControl(name, nodeControl) {
     Editor.Ipc.sendToAll('ui:has_extnodecontrol_add', name);
 }
 
-function GetNodeControl(name) {
+function GetExtNodeControl(name) {
     return allExtNodeControls[name];
 }
 
-function GetAllNodeControls() {
+function GetExtllNodeControls() {
     return allExtNodeControls;
 }

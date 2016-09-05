@@ -13,16 +13,6 @@
       },
     },
 
-    show_items: [
-        {icon:"res/grid.png", name:"Sprite"},
-        {icon:"res/grid.png", name:"LabelTTF"},
-        {icon:"res/grid.png", name:"Sprite"},
-    ],
-
-    _getItems: function() {
-        return this.show_items;
-    },
-
     addFunc: function(data) {
 
     },

@@ -37,7 +37,7 @@
             {icon:"res/control/CheckBox.png", name:"ListView", tag: 9},
         ];
 
-        var nodes=GetAllNodeControls();
+        var nodes=GetExtllNodeControls();
         for (name in nodes)
         {
             let node = nodes[name]
@@ -54,92 +54,12 @@
         return items;
     },
 
-    dragStart: function(ev) {
-        ev.stopPropagation();
-        ev.dataTransfer.dropEffect = 'move';
-        ev.dataTransfer.setData(dragIdName,ev.target._uuid);
-        ev.target.style.opacity = "0.4";
-    },
-    dragEnd: function(ev) {
-        ev.preventDefault();
-        ev.target.style.opacity = "1";
-    },
-    dragEnter: function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        
-        ev.target.style.background = 'blue';
-        ev.dataTransfer.effectAllowed = "all";
-        ev.dataTransfer.dropEffect = "all"; // drop it like it's hot
-    },
-    dragOver: function(ev) {
-        ev.dataTransfer.effectAllowed = "all";
-        ev.dataTransfer.dropEffect = "all"; // drop it like it's hot
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        var rect = ev.currentTarget.getBoundingClientRect();
-        if (ev.clientY - rect.top < rect.height / 4) {
-            ev.target.style.background = "red";
-            this._curOpMode = "top";
-        } else if(rect.bottom - ev.clientY < rect.height / 4) {
-            ev.target.style.background = "yellow";
-            this._curOpMode = "bottom";
-        } else {
-            ev.target.style.background = "blue";
-            this._curOpMode = "center";
-        }
-
-        var data = ev.dataTransfer.getData(dragIdName);
-    },
-    dragLeave: function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        ev.target.style.removeProperty("background");
-    },
-    dragDrop: function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        ev.target.style.removeProperty("background");
-        
-        var data = ev.dataTransfer.getData(dragIdName);
-        
-        var item = this.$.tree.getItemById(data);
-        if (item === null || item == undefined) {
-            return;
-        }
-        this.tryChangeItemPosition(item, ev.currentTarget);
-    },
-    tryChangeItemPosition: function(sourceItem, parentItem) {
-        if (Editor.UI.PolymerUtils.isSelfOrAncient(parentItem, sourceItem)) {
-            return;
-        }
-        if (this._curOpMode == "top") {
-            this.$.tree.setItemBefore(sourceItem, parentItem);
-        } else if(this._curOpMode == "bottom") {
-            this.$.tree.setItemAfter(sourceItem, parentItem);
-        } else {
-            this.$.tree.setItemParent(sourceItem, parentItem);
-        }
-    },  
-    newEntry: function (entry) {
-      var item = document.createElement('td-tree-item');
-      item.draggable = true;
-      item['ondragstart'] = this.dragStart.bind(this);
-      item['ondragend'] = this.dragEnd.bind(this);
-      item['ondragenter'] = this.dragEnter.bind(this);
-      item['ondragover'] = this.dragOver.bind(this);
-      item['ondragleave'] = this.dragLeave.bind(this);
-      item['ondrop'] = this.dragDrop.bind(this);
-      item.name = entry.name;
-      item.path = entry.path;
-      return item;
-    },
-
     messages: {
       "ui:has_extnodecontrol_add"(event, name) {
           let nodeControl = GetNodeControl(name);
           this.show_items.push({icon:nodeControl.icon, name:nodeControl.name})
+
+          this.show_items = this.sortItems(this.show_items)
       },
     },
 

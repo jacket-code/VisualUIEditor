@@ -136,7 +136,11 @@ function cocosExportNodeData(node, ext) {
 
     (!node.isVisible()) && (data["visible"] = node.isVisible());
 
-    if(startWith(node._className, "SubPath")) {
+    let extControl = GetExtNodeControl(node._className)
+
+    if(extControl) {
+        extControl.ExportNodeData(node, data)
+    } else if(startWith(node._className, "SubPath")) {
         data["path"] = node._path;
     }
     //Label prop
@@ -359,6 +363,7 @@ function cocosGenNodeByData(data, parent, isSetParent) {
         return;
     }
     let node = null;
+    let extControl = GetExtNodeControl(data.type);
     if(isSetParent) {
         node = parent;
     } else if(data.path) {
@@ -369,6 +374,8 @@ function cocosGenNodeByData(data, parent, isSetParent) {
         }
         cocosGenNodeByData(getPathData(data.path), node, true)
         node._className = "SubPath:" + data.path;
+    } else if(extControl) {
+        node = extControl.GenNodeByData(data, parent);
     } else if(data.type == "Scene" || !parent) {
         node = new cc.Scene();
         if(!parent) {
@@ -445,7 +452,9 @@ function cocosGenNodeByData(data, parent, isSetParent) {
     (!isNull(data.touchEnabled)) && (node._touchEnabled = data.touchEnabled);
     (!isNull(data.touchListener)) && (node.touchListener = data.touchListener);
 
-    if(data.type == "LabelTTF") {
+    if(extControl) {
+        extControl.SetNodePropByData(node, data, parent);
+    } else if(data.type == "LabelTTF") {
         data.string && (node.string = data.string);
         data.textAlign && (node.textAlign = data.textAlign);
         data.verticalAlign && (node.verticalAlign = data.verticalAlign);
@@ -600,7 +609,10 @@ function getFullPathForName(name) {
 
 function createEmptyNodeByType(data) {
     var node = null;
-    if(data == "Sprite") {
+    var extControl = GetExtNodeControl(data);
+    if(extControl) {
+        node = extControl.GenEmptyNode();
+    } else if(data == "Sprite") {
         let value = "res/default/Sprite.png";
         node = new cc.Sprite(getFullPathForName(value) );
         node._spriteFrame = value
