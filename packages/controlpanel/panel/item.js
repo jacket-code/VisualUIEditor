@@ -3,17 +3,6 @@
 
   Editor.polymerElement({
     properties: {
-      type: {
-        type: String,
-        value: 'log',
-        reflectToAttribute: true,
-      },
-
-      count: {
-        type: Number,
-        value: 0,
-      },
-
       icon: {
         type: String,
         value: '',
@@ -22,17 +11,6 @@
       name: {
         type: String,
         value: '',
-      },
-
-      showCount: {
-        type: Boolean,
-        value: false,
-      },
-
-      folded: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
       },
     },
 
