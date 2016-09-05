@@ -25,8 +25,8 @@ function isBaseTypeByName(name) {
     if(index >= 0) {
         name = name.substring(0, index);
     }
-    if(name == "LabelTTF" || name == "Slider" || name == "Sprite"
-       || name == "Scale9" || name == "Input" || name == "Button" || name == "CheckBox" || name == "LabelAtlas") {
+    if(name == "UIButton" || name == "UICheckBox" || name == "UIImage"
+       || name == "UIInput" || name == "UIScale9" || name == "UISlider" || name == "UIText" || name == "UITextAtlas") {
         return true;
     }
     if(startWith(name, "SubPath:")) {
