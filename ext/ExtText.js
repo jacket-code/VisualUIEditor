@@ -33,7 +33,8 @@ ExtText.ExportNodeData = function(node, data) {
     node.boundingHeight > 0 && (data["boundingHeight"] = node.boundingHeight);
 };
 
-ExtText.SetPropChange = function(node, path, value) {
+ExtText.SetPropChange = function(control, path, value) {
+    let node = control._node;
     if(path == "string") {
        node.string = value;
     } else if(path == "textAlign") {

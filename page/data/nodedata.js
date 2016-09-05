@@ -490,7 +490,7 @@ NodeData.prototype = {
             addNodeCommand(this._node, "touchListener", this._node.touchListener, value);
             this._node.touchListener = value;
         } else if(extControl) {
-            extControl.SetPropChange(this._node, path, value);
+            extControl.SetPropChange(this, path, value);
         } else if(this._node._className == "LabelTTF") {
             if(path == "string") {
                 this._node.string = value;

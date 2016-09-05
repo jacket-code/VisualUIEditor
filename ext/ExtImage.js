@@ -3,12 +3,12 @@ let ExtImage = {};
 
 ExtImage.name = "UIImage";
 ExtImage.icon = "res/control/Sprite.png";
-ExtImage.tag = 3;
+ExtImage.tag = 1;
+ExtImage.defRes = "res/default/Sprite.png";
 
 ExtImage.GenEmptyNode = function() {
-    let defRes = "res/default/Sprite.png";
-    let node = new ccui.ImageView(defRes);
-    node._spriteFrame = defRes;
+    let node = new ccui.ImageView(ExtImage.defRes);
+    node._spriteFrame = ExtImage.defRes;
     node._className = ExtImage.name;
     return node;
 };
@@ -17,25 +17,30 @@ ExtImage.GenNodeByData = function(data, parent) {
     return this.GenEmptyNode();
 };
 
-ExtImage.SetNodePropByData = function(node, data, parent) {
-    if(data.spriteFrame && getFullPathForName(data.spriteFrame)) {
-        let fullpath = getFullPathForName(data.spriteFrame);
+
+ExtImage.SetSpriteFrame = function(node, spriteFrame) {
+    if(spriteFrame && getFullPathForName(spriteFrame)) {
+        let fullpath = getFullPathForName(spriteFrame);
         cc.textureCache.addImage(fullpath, function(){
             let anchor = node.getAnchorPoint();
             node.loadTexture(fullpath);
             node.setAnchorPoint(anchor);
-            node._spriteFrame = data.spriteFrame;
+            node._spriteFrame = spriteFrame;
         })
     }
+}
+
+ExtImage.SetNodePropByData = function(node, data, parent) {
+    ExtImage.SetSpriteFrame(node, data.spriteFrame);
 };
 
 ExtImage.ExportNodeData = function(node, data) {
     node._spriteFrame && (data["spriteFrame"] = node._spriteFrame);
 };
 
-ExtImage.SetPropChange = function(node, path, value) {
+ExtImage.SetPropChange = function(control, path, value) {
     if(path == "spriteFrame") {
-        SetSpriteFrame(node, path, value, "res/default/Sprite.png", node.loadTexture);
+        ExtImage.SetSpriteFrame(control._node, value);
     }
 };
 
