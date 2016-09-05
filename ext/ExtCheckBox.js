@@ -18,8 +18,8 @@ ExtCheckBox.GenEmptyNode = function() {
     node._active = active;
     node._backDisable = backDisable;
     node._activeDisable = activeDisable;
-    node.setSelected(true);
     node._className = ExtCheckBox.name;
+    node.setSelected(true);
     return node;
 };
 
@@ -33,8 +33,8 @@ ExtCheckBox.SetNodePropByData = function(node, data, parent) {
     setNodeSpriteFrame("active", data["active"], node, node.loadTextureFrontCross);
     setNodeSpriteFrame("backDisable", data["backDisable"], node, node.loadTextureBackGroundDisabled);
     setNodeSpriteFrame("activeDisable", data["activeDisable"], node, node.loadTextureFrontCrossDisabled);
-
-    (data["select"]) && (node.setSelected(data["select"]));
+    
+    (!isNull(data["select"])) && (node.setSelected(data["select"]));
 };
 
 ExtCheckBox.ExportNodeData = function(node, data) {
