@@ -53,7 +53,9 @@ function setNodeSpriteFrame(path, value, node, fn) {
     }
     let newPath = "_" + path;
     node[newPath] = value;
-    fn.call(node, url);
+    cc.textureCache.addImage(url, function(){
+        fn.call(node, url);
+    })
 }
 
 function cocosExportNodeData(node, ext) {

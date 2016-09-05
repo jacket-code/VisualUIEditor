@@ -16,7 +16,18 @@ ExtText.GenNodeByData = function(data, parent) {
 };
 
 ExtText.SetNodePropByData = function(node, data, parent) {
-    data.spriteFrame && (node.string = data.spriteFrame);
+    data.string && (node.string = data.string);
+    data.textAlign && (node.textAlign = data.textAlign);
+    data.verticalAlign && (node.verticalAlign = data.verticalAlign);
+    data.fontSize && (node.fontSize = data.fontSize);
+    data.fontName && (node.fontName = data.fontName);
+    if(covertToColor(data.outlineColor)) {
+        node.outlineColor = covertToColor(data.outlineColor);
+        node.outlineSize = data.outlineSize || 0;
+        node.enableOutline(node.outlineColor, node.outlineSize);
+    }
+    data.boundingWidth && (node.boundingWidth = data.boundingWidth);
+    data.boundingHeight && (node.boundingHeight = data.boundingHeight);
 };
 
 ExtText.ExportNodeData = function(node, data) {
