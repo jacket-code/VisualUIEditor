@@ -7,7 +7,7 @@ ExtText.tag = 2;
 
 ExtText.GenEmptyNode = function() {
     let node = new ccui.Text("VisualUI", "Arial", 24);
-    node._className = "UIText";
+    node._className = ExtText.name;
     return node;
 };
 
@@ -16,18 +16,7 @@ ExtText.GenNodeByData = function(data, parent) {
 };
 
 ExtText.SetNodePropByData = function(node, data, parent) {
-    data.string && (node.string = data.string);
-    data.textAlign && (node.textAlign = data.textAlign);
-    data.verticalAlign && (node.verticalAlign = data.verticalAlign);
-    data.fontSize && (node.fontSize = data.fontSize);
-    data.fontName && (node.fontName = data.fontName);
-    if(covertToColor(data.outlineColor)) {
-        node.outlineColor = covertToColor(data.outlineColor);
-        node.outlineSize = data.outlineSize || 0;
-        node.enableOutline(node.outlineColor, node.outlineSize);
-    }
-    data.boundingWidth && (node.boundingWidth = data.boundingWidth);
-    data.boundingHeight && (node.boundingHeight = data.boundingHeight);
+    data.spriteFrame && (node.string = data.spriteFrame);
 };
 
 ExtText.ExportNodeData = function(node, data) {
@@ -76,11 +65,11 @@ ExtText.SetPropChange = function(node, path, value) {
     }
 };
 
-function ExportData(node) {
+function TextData(node) {
     this._node = node;
 }
 
-ExportData.prototype = {
+TextData.prototype = {
     __displayName__: "Text",
     __type__: "ccui.Text",
 
@@ -217,11 +206,11 @@ ExportData.prototype = {
     }
 }
 
-ExtText.ExportData = ExportData;
+ExtText.TextData = TextData;
 
 ExtText.PropComps = function(node) {
     let datas = [ new WidgetData(node) ];
-    datas.push(new ExportData(node));
+    datas.push(new TextData(node));
     return datas;
 };
 
