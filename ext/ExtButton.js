@@ -13,15 +13,26 @@ ExtButton.GenEmptyNode = function() {
     return node;
 };
 
+ExtButton.SetButtonSpriteFrame = function(path, value, node, func) {
+    setNodeSpriteFrame(path, value, node, function(url) {
+        func.call(node, url)
+        let isEnable = node.isScale9Enabled();
+        if(isEnable) {
+            node.setScale9Enabled(false);
+            node.setScale9Enabled(true);
+        }
+    });
+};
+
 ExtButton.GenNodeByData = function(data, parent) {
     return this.GenEmptyNode();
 };
 
 ExtButton.SetNodePropByData = function(node, data, parent) {
     (data["scale9Enable"]) && (node.setScale9Enabled(data["scale9Enable"]));
-    setNodeSpriteFrame("bgNormal", data["bgNormal"], node, node.loadTextureNormal);
-    setNodeSpriteFrame("bgSelect", data["bgSelect"], node, node.loadTexturePressed);
-    setNodeSpriteFrame("bgDisable", data["bgDisable"], node, node.loadTextureDisabled);
+    ExtButton.SetButtonSpriteFrame("bgNormal", data["bgNormal"], node, node.loadTextureNormal);
+    ExtButton.SetButtonSpriteFrame("bgSelect", data["bgSelect"], node, node.loadTexturePressed);
+    ExtButton.SetButtonSpriteFrame("bgDisable", data["bgDisable"], node, node.loadTextureDisabled);
     
     (data["titleText"]) && (node.setTitleText(data["titleText"]));
     (data["fontName"]) && (node.setTitleFontName(data["fontName"]));
@@ -47,11 +58,11 @@ ExtButton.SetPropChange = function(control, path, value) {
     if(path == "isScale9Enabled") {
         control._node.setScale9Enabled(value);
     } else if(path == "bgNormal") {
-        SetSpriteFrame(control._node, path, value, "res/default/ButtonNormal.png", control._node.loadTextureNormal);
+        ExtButton.SetButtonSpriteFrame(path, value, control._node, control._node.loadTextureNormal);
     } else if(path == "bgSelect") {
-        SetSpriteFrame(control._node, path, value, "res/default/ButtonSelect.png", control._node.loadTexturePressed);
+        ExtButton.SetButtonSpriteFrame(path, value, control._node, control._node.loadTexturePressed);
     } else if(path == "bgDisable") {
-        SetSpriteFrame(control._node, path, value, "res/default/ButtonDisable.png", control._node.loadTextureDisabled);
+        ExtButton.SetButtonSpriteFrame(path, value, control._node, control._node.loadTextureDisabled);
     } else if(path == "titleText") {
         control._node.setTitleText(value);
     } else if(path == "fontName") {
