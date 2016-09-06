@@ -29,14 +29,22 @@
             show_items.push({icon:node.icon, name:node.name, tag:node.tag});
         }
 
-        this.show_items = this.sortItems(show_items);
+        this.resetSortItems(show_items);
     },
 
-    sortItems: function(items) {
+    resetSortItems: function(items) {
         items.sort(function(a,b){
             return (a.tag - b.tag)
         });
-        return items;
+        let newItems = [];
+
+        for(let i = 0; i < items.length; i++) {
+            if(items[i].tag >= 0) {
+                newItems.push(items[i]);
+            }
+        }
+
+        this.show_items = newItems;
     },
 
     messages: {
@@ -44,7 +52,7 @@
           let nodeControl = GetNodeControl(name);
           this.show_items.push({icon:nodeControl.icon, name:nodeControl.name})
 
-          this.show_items = this.sortItems(this.show_items)
+          this.resetSortItems(this.show_items)
       },
     },
 
