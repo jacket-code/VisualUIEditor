@@ -72,8 +72,6 @@ ExtText.SetPropChange = function(control, path, value) {
         node.boundingWidth = value;
     } else if(path == "boundingHeight") {
         node.boundingHeight = value;
-    } else {
-        return;
     }
 };
 
