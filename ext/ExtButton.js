@@ -65,12 +65,16 @@ ExtButton.SetPropChange = function(control, path, value) {
         ExtButton.SetButtonSpriteFrame(path, value, control._node, control._node.loadTextureDisabled);
     } else if(path == "titleText") {
         control._node.setTitleText(value);
+        control._node.getTitleRenderer()._setUpdateTextureDirty();
     } else if(path == "fontName") {
         control._node.setTitleFontName(value);
+        control._node.getTitleRenderer()._setUpdateTextureDirty();
     } else if(path == "fontSize") {
         control._node.setTitleFontSize(value);
+        control._node.getTitleRenderer()._setUpdateTextureDirty();
     } else if(path == "fontColor") {
         control._node.setTitleColor(new cc.Color(value.r, value.g, value.b, value.a));
+        control._node.getTitleRenderer()._setUpdateTextureDirty();
     } else {
         control._node[path] = value;
     }
