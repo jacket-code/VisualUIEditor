@@ -7,7 +7,7 @@ ExtScale9.tag = 4;
 ExtScale9.defRes = "res/default/Scale9.png";
 
 ExtScale9.GenEmptyNode = function() {
-    node = new cc.Scale9Sprite(ExtScale9.defRes);
+    node = new ccui.Scale9Sprite(ExtScale9.defRes);
     node._spriteFrame = ExtScale9.defRes;
     node._className = ExtScale9.name;
     return node;
