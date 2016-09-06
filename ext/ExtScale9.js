@@ -17,7 +17,7 @@ ExtScale9.GenNodeByData = function(data, parent) {
     return this.GenEmptyNode();
 };
 
-ExtScale9.SetScale9Sprite = function(node, spriteFrame) {
+ExtScale9.SetScale9Sprite = function(node, spriteFrame, data) {
     if(spriteFrame && getFullPathForName(spriteFrame)) {
         let fullpath = getFullPathForName(spriteFrame);
         cc.textureCache.addImage(fullpath, function(){
@@ -40,7 +40,7 @@ ExtScale9.SetScale9Sprite = function(node, spriteFrame) {
 }
 
 ExtScale9.SetNodePropByData = function(node, data, parent) {
-    ExtScale9.SetScale9Sprite(node, data.spriteFrame);
+    ExtScale9.SetScale9Sprite(node, data.spriteFrame, data);
 };
 
 ExtScale9.ExportNodeData = function(node, data) {
@@ -54,7 +54,7 @@ ExtScale9.ExportNodeData = function(node, data) {
 
 ExtScale9.SetPropChange = function(control, path, value) {
     if(path == "spriteFrame") {
-        ExtScale9.SetScale9Sprite(control._node, value);
+        ExtScale9.SetScale9Sprite(control._node, value, {});
     } else {
         control._node[path] = value;
     }
@@ -90,6 +90,7 @@ ExtScale9.Scale9Data = Scale9Data;
 
 ExtScale9.PropComps = function(node) {
     let datas = [ new WidgetData(node) ];
+    datas.push(new TouchData(node));
     datas.push(new Scale9Data(node));
     return datas;
 };

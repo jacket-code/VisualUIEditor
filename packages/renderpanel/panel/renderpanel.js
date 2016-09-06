@@ -925,7 +925,7 @@
             if(endWith(subPath, ".ui")) {
                 node = cocosGenNodeByData({"path":subPath}, runScene);
             } else if(endWith(subPath, ".png") || endWith(subPath, ".jpg")) {
-                node = createEmptyNodeByType("Sprite");
+                node = createEmptyNodeByType("UIImage");
                 if(node) {
                     setNodeSpriteFrame("spriteFrame", subPath, node, node.initWithFile);
                 }

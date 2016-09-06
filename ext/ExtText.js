@@ -222,6 +222,7 @@ ExtText.TextData = TextData;
 
 ExtText.PropComps = function(node) {
     let datas = [ new WidgetData(node) ];
+    datas.push(new TouchData(node));
     datas.push(new TextData(node));
     return datas;
 };

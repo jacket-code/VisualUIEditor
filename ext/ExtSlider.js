@@ -46,7 +46,7 @@ ExtSlider.SetPropChange = function(control, path, value) {
     } else if(path == "placeholderFontColor") {
         control._node.placeholderFontColor = new cc.Color(value.r, value.g, value.b, value.a);
     } else if(path == "spriteBg") {
-        ExtImage.SetSpriteFrame(control._node, value);
+        ExtSlider.SetSpriteFrame(control._node, value);
     } else {
         control._node[path] = value;
     }
@@ -175,6 +175,7 @@ ExtSlider.ExportData.prototype = {
 
 ExtSlider.PropComps = function(node) {
     let datas = [ new WidgetData(node) ];
+    datas.push(new TouchData(node));
     datas.push(new ExtSlider.ExportData(node));
     return datas;
 };

@@ -144,114 +144,6 @@ function cocosExportNodeData(node, ext) {
         extControl.ExportNodeData(node, data)
     } else if(startWith(node._className, "SubPath")) {
         data["path"] = node._path;
-    }
-    //Label prop
-    else if(node._className == "LabelTTF") {
-        data["string"] = node.string;
-        if(node.textAlign != cc.TEXT_ALIGNMENT_LEFT) {
-            data["textAlign"] = node.textAlign;
-        }
-        if(node.verticalAlign != cc.VERTICAL_TEXT_ALIGNMENT_TOP) {
-            data["verticalAlign"] = node.verticalAlign;
-        }
-        data["fontSize"] = node.fontSize;
-        if(node.fontName.length > 0) {
-            data["fontName"] = node.fontName;
-        }
-
-        if(!cc.colorEqual(node.fillStyle, cc.color.WHITE)) {
-            data["fillStyle"] = [node.fillStyle.r, node.fillStyle.g, node.fillStyle.b, node.fillStyle.a];
-        }
-        if(!cc.colorEqual(node.strokeStyle, cc.color.WHITE)) {
-            data["strokeStyle"] = [node.strokeStyle.r, node.strokeStyle.g, node.strokeStyle.b, node.strokeStyle.a];
-        }
-        if(node.lineWidth > 0) {
-            data["lineWidth"] = node.lineWidth;
-        }
-        if(node.shadowOffsetX > 0) {
-            data["shadowOffsetX"] = node.shadowOffsetX;
-        }
-        if(node.shadowOffsetY > 0) {
-            data["shadowOffsetY"] = node.shadowOffsetY;
-        }
-        if(node.shadowOpacity > 0) {
-            data["shadowOpacity"] = node.shadowOpacity;
-        }
-        if(node.shadowBlur > 0) {
-            data["shadowBlur"] = node.shadowBlur;
-        }
-    } else if(node._className == "Sprite") {
-        if(node._spriteFrame)
-            data["spriteFrame"] = node._spriteFrame;
-
-        let blendFunc = node.getBlendFunc();
-        if(blendFunc.src != cc.BLEND_SRC) {
-            data["blendSrc"] = blendFunc.src;
-        }
-
-        if(blendFunc.dst != cc.BLEND_DST) {
-            data["blendDst"] = blendFunc.dst;
-        }
-    } else if(node._className == "Scale9") {
-        if(node._spriteFrame)
-            data["spriteFrame"] = node._spriteFrame;
-
-        node.insetLeft && (data.insetLeft = node.insetLeft);
-        node.insetTop && (data.insetTop = node.insetTop);
-        node.insetRight && (data.insetRight = node.insetRight);
-        node.insetBottom && (data.insetBottom = node.insetBottom);
-
-        
-    } else if(node._className == "Input") {
-        (node.string.length > 0) && (data["string"] = node.string);
-        let value = null;
-        value = node._edFontName;
-        (value.length > 0) && (data["fontName"] = value);
-        value = node._edFontSize;
-        (value != 14) && (data["fontSize"] = value);
-        value = node._textColor;
-        (!cc.colorEqual(value, cc.color.BLACK)) && (data["fontColor"] = [value.r, value.g, value.b, value.a]);
-        (node.inputFlag != cc.EDITBOX_INPUT_FLAG_SENSITIVE) && (data["inputFlag"] = node.inputFlag);
-        (node.inputMode != cc.EDITBOX_INPUT_MODE_ANY) && (data["inputMode"] = node.inputMode);
-        (node.returnType != cc.KEYBOARD_RETURNTYPE_DEFAULT) && (data["returnType"] = node.returnType);
-        (node.maxLength != 50) && (data["maxLength"] = node.maxLength);
-        (node.placeHolder && node.placeHolder.length > 0) && (data["placeHolder"] = node.placeHolder);
-        value = node._placeholderFontName;
-        (value.length > 0) && (data["placeHolderFontName"] = value);
-        value = node._placeholderFontSize;
-        (value != 14) && (data["placeholderFontSize"] = value);
-        value = node._placeholderColor || cc.color.GRAY;
-        (!cc.colorEqual(value, cc.color.GRAY)) && (data["placeholderFontColor"] = [value.r, value.g, value.b, value.a]);
-        value = node._spriteBg;
-        (value && value.length > 0) && (data["spriteBg"] = value);
-    } else if(node._className == "Slider") {
-        (node.percent) && (data["percent"] = node.percent);
-        (node._barBg) && (data["barBg"] = node._barBg);
-        (node._barProgress) && (data["barProgress"] = node._barProgress);
-        (node._barNormalBall) && (data["barNormalBall"] = node._barNormalBall);
-        (node._barSelectBall) && (data["barSelectBall"] = node._barSelectBall);
-        (node._barDisableBall) && (data["barDisableBall"] = node._barDisableBall);
-    } else if(node._className == "Button") {
-        (node.isScale9Enabled()) && (data["scale9Enable"] = node.isScale9Enabled());
-        (node._bgNormal) && (data["bgNormal"] = node._bgNormal);
-        (node._bgSelect) && (data["bgSelect"] = node._bgSelect);
-        (node._bgDisable) && (data["bgDisable"] = node._bgDisable);
-        (node.getTitleText().length > 0) && (data["titleText"] = node.getTitleText());
-        (node.getTitleFontName().length > 0) && (data["fontName"] = node.getTitleFontName());
-        (node.getTitleFontSize() > 0) && (data["fontSize"] = node.getTitleFontSize());
-        if(!cc.colorEqual(node.getTitleColor(), cc.color.WHITE)) {
-            let color = node.getTitleColor();
-            data["fontColor"] = [color.r, color.g, color.b, color.a];
-        }
-    } else if(node._className == "CheckBox") {
-        (node._back) && (data["back"] = node._back);
-        (node._backSelect) && (data["backSelect"] = node._backSelect);
-        (node._active) && (data["active"] = node._active);
-        (node._backDisable) && (data["backDisable"] = node._backDisable);
-        (node._activeDisable) && (data["activeDisable"] = node._activeDisable);
-
-        data["select"] = node.isSelected();
-        // data["enable"] = node.isTouchEnabled();
     } else if(node._className == "Layout") {
         (node._backGroundImageFileName && node._backGroundImageFileName.length > 0) && (data["bkImg"] = node._backGroundImageFileName);
         (node._backGroundScale9Enabled) && (node["bkScaleEnable"] = node._backGroundScale9Enabled);
@@ -273,14 +165,6 @@ function cocosExportNodeData(node, ext) {
            data["clippingEnabled"] = node.clippingEnabled;
            data["clippingType"] = node.clippingType;
        }
-    } else if(node._className == "LabelAtlas") {
-        if(node._charMapFile) {
-            node._string && (data["string"] = node._string);
-            data["charMapFile"] = node._charMapFile;
-            data["itemWidth"] = node._itemWidth || 0;
-            data["itemHeight"] = node._itemHeight || 0;
-            data["mapStartChar"] = node._mapStartChar || "0";
-        }
     }
 
     if(!isBaseType(node)) {
@@ -456,98 +340,6 @@ function cocosGenNodeByData(data, parent, isSetParent) {
 
     if(extControl) {
         extControl.SetNodePropByData(node, data, parent);
-    } else if(data.type == "LabelTTF") {
-        data.string && (node.string = data.string);
-        data.textAlign && (node.textAlign = data.textAlign);
-        data.verticalAlign && (node.verticalAlign = data.verticalAlign);
-        data.fontSize && (node.fontSize = data.fontSize);
-        data.fontName && (node.fontName = data.fontName);
-        (covertToColor(data.fillStyle)) && (node.fillStyle = covertToColor(data.fillStyle));
-        (covertToColor(data.strokeStyle)) && (node.strokeStyle = covertToColor(data.strokeStyle));
-    } else if(data.type == "Input") {
-        data.string && (node.string = data.string);
-        data.fontSize && (node.fontSize = data.fontSize);
-        data.fontName && (node.fontName = data.fontName);
-        (covertToColor(data.fontColor)) && (node.fontColor = covertToColor(data.fontColor));
-        data.maxLength && (node.maxLength = data.maxLength);
-        data.placeHolder && (node.placeHolder = data.placeHolder);
-        data.placeHolderFontName && (node.placeHolderFontName = data.placeHolderFontName);
-        data.placeHolderFontSize && (node.placeHolderFontSize = data.placeHolderFontSize);
-        (covertToColor(data.placeholderFontColor)) && (node.placeholderFontColor = covertToColor(data.placeholderFontColor));
-        data.inputFlag && (node.inputFlag = data.inputFlag);
-        data.inputMode && (node.inputMode = data.inputMode);
-        data.returnType && (node.returnType = data.returnType);
-
-        if(data.spriteBg && getFullPathForName(data.spriteBg)) {
-            let fullpath = getFullPathForName(data.spriteBg);
-            cc.textureCache.addImage(fullpath, function(){
-                let anchor = node.getAnchorPoint();
-                let size = node.getPreferredSize();
-                node.initWithBackgroundSprite(new cc.Scale9Sprite(fullpath));
-                node.setAnchorPoint(anchor);
-                node.setPreferredSize(size);
-                node._spriteBg = data.spriteBg;
-            })
-        }
-
-    } else if(data.type == "Sprite") {
-        if(data.spriteFrame && getFullPathForName(data.spriteFrame)) {
-            let fullpath = getFullPathForName(data.spriteFrame);
-            cc.textureCache.addImage(fullpath, function(){
-                let anchor = node.getAnchorPoint();
-                node.initWithFile(fullpath);
-                node.setAnchorPoint(anchor);
-                node._spriteFrame = data.spriteFrame;
-                data.blendSrc && (node.setBlendFunc(parseInt(data.blendSrc), node.getBlendFunc().dst));
-                data.blendDst && (node.getBlendFunc().src, node.setBlendFunc(parseInt(data.blendDst)));
-            })
-        }
-    } else if(data.type == "Scale9") {
-        if(data.spriteFrame && getFullPathForName(data.spriteFrame)) {
-            let fullpath = getFullPathForName(data.spriteFrame);
-            cc.textureCache.addImage(fullpath, function(){
-                let size = node.getContentSize();
-                let anchor = node.getAnchorPoint();
-                node.initWithFile(fullpath);
-                node.setAnchorPoint(anchor);
-                node._spriteFrame = data.spriteFrame;
-
-                if(!cc.sizeEqualToSize(size, cc.size(0, 0))) {
-                    node.setPreferredSize(size);
-                }
-
-                data.insetLeft && (node.insetLeft = data.insetLeft);
-                data.insetTop && (node.insetTop = data.insetTop);
-                data.insetRight && (node.insetRight = data.insetRight);
-                data.insetBottom && (node.insetBottom = data.insetBottom);
-            });
-        }
-    } else if(data.type == "Slider") {
-        (data["percent"]) && (node.percent = data["percent"]);
-        setNodeSpriteFrame("barBg", data["barBg"], node, node.loadBarTexture);
-        setNodeSpriteFrame("barProgress", data["barProgress"], node, node.loadProgressBarTexture);
-        setNodeSpriteFrame("barNormalBall", data["barNormalBall"], node, node.loadSlidBallTextureNormal);
-        setNodeSpriteFrame("barSelectBall", data["barSelectBall"], node, node.loadSlidBallTexturePressed);
-        setNodeSpriteFrame("barDisableBall", data["barDisableBall"], node, node.loadSlidBallTextureDisabled);
-    } else if(data.type == "Button") {
-        (data["scale9Enable"]) && (node.setScale9Enabled(data["scale9Enable"]));
-        setNodeSpriteFrame("bgNormal", data["bgNormal"], node, node.loadTextureNormal);
-        setNodeSpriteFrame("bgSelect", data["bgSelect"], node, node.loadTexturePressed);
-        setNodeSpriteFrame("bgDisable", data["bgDisable"], node, node.loadTextureDisabled);
-        
-        (data["titleText"]) && (node.setTitleText(data["titleText"]));
-        (data["fontName"]) && (node.setTitleFontName(data["fontName"]));
-        (data["fontSize"]) && (node.setTitleFontSize(data["fontSize"]));
-        (data["fontColor"]) && (node.setTitleColor(covertToColor(data["fontColor"])));
-    } else if(node._className == "CheckBox") {
-        setNodeSpriteFrame("back", data["back"], node, node.loadTextureBackGround);
-        setNodeSpriteFrame("backSelect", data["backSelect"], node, node.loadTextureBackGroundSelected);
-        setNodeSpriteFrame("active", data["active"], node, node.loadTextureFrontCross);
-        setNodeSpriteFrame("backDisable", data["backDisable"], node, node.loadTextureBackGroundDisabled);
-        setNodeSpriteFrame("activeDisable", data["activeDisable"], node, node.loadTextureFrontCrossDisabled);
-
-        (data["select"]) && (node.setSelected(data["select"]));
-        // (data["enable"]) && (node.setTouchEnabled(data["enable"]));
     } else if(node._className == "Layout") {
         setNodeSpriteFrame("backGroundImageFileName", data["bkImg"], node, node.setBackGroundImage);
         (data["bkScaleEnable"]) && (node.setBackGroundImageScale9Enabled(data["bkScaleEnable"]));
@@ -561,20 +353,12 @@ function cocosGenNodeByData(data, parent, isSetParent) {
         (data["layoutType"]) && (node.setLayoutType(data["layoutType"]));
         (data["clippingEnabled"]) && (node.setClippingEnabled(data["clippingEnabled"]));
         (data["clippingType"]) && (node.setClippingType(data["clippingType"]));
-    } else if(node._className == "LabelAtlas") {
-        if(data.charMapFile && getFullPathForName(data.charMapFile)) {
-            let fullpath = getFullPathForName(data.charMapFile);
-            cc.textureCache.addImage(fullpath, function(){
-                node.initWithString(data["string"] || "", fullpath, data["itemWidth"] || 0, data["itemHeight"] || 0, data["mapStartChar"] || "0");
-                node._charMapFile = data.charMapFile;
-            });
-        }
     }
 
     data.children = data.children || [];
     for(var i = 0; i < data.children.length; i++) {
         let child = cocosGenNodeByData(data.children[i], node);
-        if(node) {
+        if(child && !child.ignoreAddToParent) {
             node.addChild(child);
         }
     } 

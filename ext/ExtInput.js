@@ -6,15 +6,17 @@ ExtInput.icon = "res/control/Input.png";
 ExtInput.tag = 5;
 ExtInput.defRes = "res/default/shurukuang.png";
 
-ExtImage.SetSpriteFrame = function(node, spriteFrame) {
+ExtInput.SetSpriteFrame = function(node, spriteFrame) {
     if(spriteFrame && getFullPathForName(spriteFrame)) {
         let fullpath = getFullPathForName(spriteFrame);
         cc.textureCache.addImage(fullpath, function(){
             let anchor = node.getAnchorPoint();
-            let size = node.getPreferredSize();
-            node.initWithBackgroundSprite(new cc.Scale9Sprite(fullpath));
+            let pos = node.getPosition();
+            let size = node.getContentSize();
+            node.initWithSizeAndBackgroundSprite(size, new cc.Scale9Sprite(fullpath));
+            node.setPosition(pos);
             node.setAnchorPoint(anchor);
-            node.setPreferredSize(size);
+            // node.setContentSize(size);
             node._spriteFrame = spriteFrame;
         })
     }
@@ -26,7 +28,7 @@ ExtInput.GenEmptyNode = function() {
     node.placeHolder = "VisualUI";
     node.placeholderFontName = "Arial";
     node.placeholderFontColor = cc.Color.GRAY;
-    ExtImage.SetSpriteFrame(node, ExtInput.defRes);
+    ExtInput.SetSpriteFrame(node, ExtInput.defRes);
     node._className = ExtInput.name;
     return node;
 };
@@ -49,7 +51,7 @@ ExtInput.SetNodePropByData = function(node, data, parent) {
     data.inputMode && (node.inputMode = data.inputMode);
     data.returnType && (node.returnType = data.returnType);
 
-    ExtImage.SetSpriteFrame(node, data.spriteFrame);
+    ExtInput.SetSpriteFrame(node, data.spriteFrame);
 };
 
 ExtInput.ExportNodeData = function(node, data) {
@@ -82,7 +84,7 @@ ExtInput.SetPropChange = function(control, path, value) {
     } else if(path == "placeholderFontColor") {
         control._node.placeholderFontColor = new cc.Color(value.r, value.g, value.b, value.a);
     } else if(path == "spriteBg") {
-        ExtImage.SetSpriteFrame(control._node, value);
+        ExtInput.SetSpriteFrame(control._node, value);
     } else {
         control._node[path] = value;
     }

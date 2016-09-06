@@ -182,6 +182,7 @@ ExtButton.ExportData.prototype = {
 
 ExtButton.PropComps = function(node) {
     let datas = [ new WidgetData(node) ];
+    datas.push(new TouchData(node));
     datas.push(new ExtButton.ExportData(node));
     return datas;
 };

@@ -9,29 +9,37 @@ ExtTextAtlas.defStr = "453224679";
 
 ExtTextAtlas.GenEmptyNode = function() {
     let node = new ccui.TextAtlas("453224679", ExtTextAtlas.defRes, 20, 27, "0");
-    node._charMapFile = ExtTextAtlas.defRes;
     node._className = ExtTextAtlas.name;
     return node;
 };
 
 ExtTextAtlas.GenNodeByData = function(data, parent) {
-    return this.GenEmptyNode();
+    let node = new ccui.TextAtlas(data.string, data.charMapFile, data.itemWidth, data.itemHeight, data.mapStartChar);
+    node._className = ExtTextAtlas.name;
+    return node;
 };
 
 ExtTextAtlas.ResetPropByData = function(control, data, parent) {
+    if(data.ignoreSetProp) {
+        return;
+    }
     let node = control._node;
     parent = parent || node.getParent();
-    let old_data = cocosExportNodeData(node, {uuid:true});
 
     let fullpath = getFullPathForName(data.charMapFile);
     cc.textureCache.addImage(fullpath, function(atlas){
-        let size = atlas.getContentSize();
+        let size = node.getContentSize();
+        if(atlas) {
+            size = cc.size(atlas.width, atlas.height);
+        }
         if(data.itemWidth > size.width || data.itemHeight > size.height) {
             data.itemWidth = size.width / 10;
             data.itemHeight = size.height;
         }
+        data.ignoreSetProp = true;
         let newNode = cocosGenNodeByData(data, parent);
         node.removeFromParent();
+        node.ignoreAddToParent = true;
         parent.addChild(newNode);
         control._node = newNode;
     });
@@ -42,9 +50,9 @@ ExtTextAtlas.SetNodePropByData = function(node, data, parent) {
 };
 
 ExtTextAtlas.ExportNodeData = function(node, data) {
-    if(node._charMapFile) {
-        node._string && (data["string"] = node._string);
-        data["charMapFile"] = node._charMapFile;
+    if(node._charMapFileName) {
+        node._stringValue && (data["string"] = node._stringValue);
+        data["charMapFile"] = node._charMapFileName;
         data["itemWidth"] = node._itemWidth || 0;
         data["itemHeight"] = node._itemHeight || 0;
         data["mapStartChar"] = node._mapStartChar || "0";
@@ -52,9 +60,9 @@ ExtTextAtlas.ExportNodeData = function(node, data) {
 };
 
 ExtTextAtlas.SetPropChange = function(control, path, value) {
-    let data = {};
+    let data = cocosExportNodeData(control._node, {uuid: true});
     if(path == "string") {
-        data.string = value
+        data.string = value;
     } else if(path == "charMapFile") {
         data.charMapFile = value;
     } else if(path == "itemWidth") {
@@ -82,7 +90,7 @@ ExtTextAtlas.ExportData.prototype = {
             name: "string",
             attrs: {
             },
-            value: this._node._string,
+            value: this._node._stringValue,
         };
     },
 
@@ -93,7 +101,7 @@ ExtTextAtlas.ExportData.prototype = {
             name: "charMapFile",
             attrs: {
             },
-            value: this._node._charMapFile,
+            value: this._node._charMapFileName,
         };
     },
 
@@ -146,6 +154,7 @@ ExtTextAtlas.ExportData.prototype = {
 
 ExtTextAtlas.PropComps = function(node) {
     let datas = [ new WidgetData(node) ];
+    datas.push(new TouchData(node));
     datas.push(new ExtTextAtlas.ExportData(node));
     return datas;
 };

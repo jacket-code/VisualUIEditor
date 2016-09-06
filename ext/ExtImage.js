@@ -74,6 +74,7 @@ ExtImage.ImageData = ImageData;
 
 ExtImage.PropComps = function(node) {
     let datas = [ new WidgetData(node) ];
+    datas.push(new TouchData(node));
     datas.push(new ImageData(node));
     return datas;
 };
